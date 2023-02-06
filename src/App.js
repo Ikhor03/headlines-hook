@@ -1,7 +1,7 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Cards from './cards';
-import { Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 
 
 function App() {
@@ -26,6 +26,10 @@ function App() {
           today</p>
       </div>
 
+
+      <Container fluid>
+        <Cards />
+      </Container>
 
     </div>
 

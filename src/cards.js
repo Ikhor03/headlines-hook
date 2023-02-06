@@ -1,33 +1,33 @@
 import { Component } from "react";
 import { Card, Col } from "react-bootstrap";
-import NotFound, { Loading } from "./alert";
-const url = 'https://newsapi.org/v2/top-headlines?country=id&apiKey=1ec087e86b5143d28480549839fbe11c';
-
-
-async function printCards(url) {
-
-    let article = [];
-    const getData = () => {
-        fetch(url)
-            .then(res => res.json())
-            .then((data) => {
-                article.push(data.articles);
-            })
-        return article;
-    }
-
-
-    return getData()
-
-}
-printCards(url);
+// import NotFound, { Loading } from "./alert";
 
 
 class Cards extends Component {
-    
-    render() {
-        return (
+    constructor(props) {
+        super(props);
+        this.state = {
+            url: 'https://newsapi.org/v2/top-headlines?country=id&apiKey=1ec087e86b5143d28480549839fbe11c',
+            data: {}
+        }
+    }
 
+    componentDidMount() {
+        fetch(this.state.url)
+            .then(res => res.json())
+            .then((data) => {
+                let article = data.articles;
+                // article.map(e => console.log(e))
+                this.setState({
+                    data: article
+                })
+            })
+    }
+
+
+    render() {
+        console.log(this.state.data); // NOTE: Sudah dapat datanya, tinggal di akses dan dimasukkan ke DOM
+        return (
             <Col>
                 <Card>
                     <Card.Img variant="top" src="holder.js/100px180" />
@@ -40,7 +40,6 @@ class Cards extends Component {
                     </Card.Body>
                 </Card>
             </Col>
-
         )
     }
 }
