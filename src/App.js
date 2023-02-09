@@ -1,6 +1,5 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import LiveSearch from './livesearch';
 import Cards from './cards';
 
 

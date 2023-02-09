@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
-import NotFound, { Loading } from "./alert";
 
 
 class Cards extends Component {
@@ -45,7 +44,7 @@ class Cards extends Component {
                     })
                 })
         } else {
-            await fetch(`https://newsapi.org/v2/everything?q=${value}&from=2023-01-07&sortBy=publishedAt&apiKey=1ec087e86b5143d28480549839fbe11c`)
+            await fetch(`https://newsapi.org/v2/everything?q=${value}&apiKey=1ec087e86b5143d28480549839fbe11c`)
                 .then(res => res.json())
                 .then((data) => {
                     let article = data.articles;
