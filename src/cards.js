@@ -44,7 +44,7 @@ class Cards extends Component {
                     })
                 })
         } else {
-            await fetch(`https://newsapi.org/v2/everything?q=${value}&apiKey=1ec087e86b5143d28480549839fbe11c`)
+            await fetch(`https://newsapi.org/v2/everything?q=${value}&sortBy=relevancy&apiKey=1ec087e86b5143d28480549839fbe11c`)
                 .then(res => res.json())
                 .then((data) => {
                     let article = data.articles;
