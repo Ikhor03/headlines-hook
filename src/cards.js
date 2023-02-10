@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
 
 
 class Cards extends Component {
@@ -8,7 +8,7 @@ class Cards extends Component {
         this.state = {
             data: [],
             value: '',
-            hide: 'hide',
+            isMatch: false,
             url: 'https://newsapi.org/v2/top-headlines?country=id&apiKey=1ec087e86b5143d28480549839fbe11c'
         }
 
@@ -19,6 +19,15 @@ class Cards extends Component {
         this.setState({
             value: e.target.value
         })
+    }
+
+    searchHandler(artikel, value) {
+        let is = artikel.title.toLowerCase().includes(value.toLowerCase());
+        if (!is) {
+            return 'hide'
+        } else {
+            return ''
+        }
     }
 
     async componentDidMount() {
@@ -32,34 +41,35 @@ class Cards extends Component {
             })
     }
 
-    async componentDidUpdate() {
-        const { value, url } = this.state;
-        if (!value) {
-            await fetch(url)
-                .then(res => res.json())
-                .then((data) => {
-                    let article = data.articles;
-                    this.setState({
-                        data: article
-                    })
-                })
-        } else {
-            await fetch(`https://newsapi.org/v2/everything?q=${value}&sortBy=relevancy&apiKey=1ec087e86b5143d28480549839fbe11c`)
-                .then(res => res.json())
-                .then((data) => {
-                    let article = data.articles;
-                    this.setState({
-                        data: article
-                    })
-                })
-        }
-    }
+
+    // async componentDidUpdate() {
+    //     const { value, url } = this.state;
+    //     if (!value) {
+    //         await fetch(url)
+    //             .then(res => res.json())
+    //             .then((data) => {
+    //                 let article = data.articles;
+    //                 this.setState({
+    //                     data: article
+    //                 })
+    //             })
+    //     } else {
+    //         await fetch(`https://newsapi.org/v2/everything?q=${value}&sortBy=relevancy&apiKey=1ec087e86b5143d28480549839fbe11c`)
+    //             .then(res => res.json())
+    //             .then((data) => {
+    //                 let article = data.articles;
+    //                 this.setState({
+    //                     data: article
+    //                 })
+    //             })
+    //     }
+    // }
 
     render() {
-        const { data } = this.state;
+        const { data, value } = this.state;
         let printCard = (data.map((artikel, key) => {
             return (
-                <Col key={key} xs lg="5" className={`mb-3`}>
+                <Col key={key} xs lg="5" className={`mb-3 ${this.searchHandler(artikel, value)}`}>
                     <Card style={{ width: '100%' }}>
                         <Card.Img variant="top" src={artikel.urlToImage} />
                         <Card.Body>
@@ -76,11 +86,20 @@ class Cards extends Component {
 
         return (
             <div>
-                <Form>
-                    <Form.Control onInput={this.inputHandler} value={this.state.value} type="text" placeholder="Find some insight..." className="mt-3" />
-                    <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
-                        today</p>
-                </Form>
+                <Container fluid className="mt-2">
+                    <Form className="d-flex">
+                        <Form.Control
+                            onInput={this.inputHandler}
+                            type="search"
+                            placeholder="Search"
+                            className="me-2"
+                            aria-label="Search"
+                        />
+                        <Button variant="light">Search</Button>
+                    </Form>
+                </Container>
+                <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
+                    today</p>
 
                 <Row className="justify-content-md-center">
                     {printCard}
