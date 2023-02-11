@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
+import NotFound from "./alert";
 
 
 class Cards extends Component {
@@ -31,14 +32,15 @@ class Cards extends Component {
     }
 
     async componentDidMount() {
-        await fetch(this.state.url)
-            .then(res => res.json())
-            .then((data) => {
+        const {url} = this.state;
+        await fetch(url)
+        .then(res => res.json())
+        .then((data) => {
                 let article = data.articles;
                 this.setState({
                     data: article
                 })
-            })
+            }).catch(() => { <NotFound />})
     }
 
 
@@ -97,9 +99,9 @@ class Cards extends Component {
                         />
                         <Button variant="light">Search</Button>
                     </Form>
+                    <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
+                        today</p>
                 </Container>
-                <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
-                    today</p>
 
                 <Row className="justify-content-md-center">
                     {printCard}
