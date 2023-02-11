@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
-import NotFound from "./alert";
 
 
 class Cards extends Component {
@@ -40,7 +39,18 @@ class Cards extends Component {
                 this.setState({
                     data: article
                 })
-            }).catch(() => { <NotFound />})
+            })
+    }
+    async componentDidUpdate() {
+        const {url} = this.state;
+        await fetch(url)
+        .then(res => res.json())
+        .then((data) => {
+                let article = data.articles;
+                this.setState({
+                    data: article
+                })
+            })
     }
 
 
