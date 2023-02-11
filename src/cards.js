@@ -10,7 +10,7 @@ class Cards extends Component {
             data: [],
             value: '',
             isMatch: false,
-            url: 'https://newsapi.org/v2/top-headlines?country=id&apiKey=1ec087e86b5143d28480549839fbe11c'
+            url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=8f7c365e620944dea3d407af962acc45'
         }
 
         this.inputHandler = this.inputHandler.bind(this);
