@@ -11,7 +11,8 @@ class Cards extends Component {
             data: [],
             value: '',
             url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=8f7c365e620944dea3d407af962acc45',
-            err: false
+            err: false,
+            cardFound: 0
         }
 
         this.inputHandler = this.inputHandler.bind(this);
@@ -23,13 +24,15 @@ class Cards extends Component {
         })
     }
 
-    searchHandler(artikel, value) {
+    searchHandler(artikel, value, counter) {
         let is = artikel.title.toLowerCase().includes(value.toLowerCase());
         if (!is) {
             return 'hide'
         } else {
+            counter.push(0)
             return ''
         }
+
     }
 
     //fetching API
@@ -51,7 +54,8 @@ class Cards extends Component {
     //get data json lokal
     async componentDidMount() {
         let article = dataHeadlines.articles
-        this.setState({data : article})
+        this.setState({ data: article })
+
     }
 
 
@@ -81,9 +85,10 @@ class Cards extends Component {
 
     render() {
         const { data, value, err } = this.state;
+        let counter = []
         let printCard = (data.map((artikel, key) => {
             return (
-                <Col key={key} xs lg="5" className={`mb-3 ${this.searchHandler(artikel, value)}`}>
+                <Col key={key} xs lg="5" className={`mb-3 ${this.searchHandler(artikel, value, counter)}`}>
                     <Card style={{ width: '100%' }}>
                         <Card.Img variant="top" src={artikel.urlToImage} />
                         <Card.Body>
@@ -99,10 +104,12 @@ class Cards extends Component {
 
         }))
 
+
         let error;
-        let loading;
-        if (err) {
-            error = <NotFound />
+        if (err || counter.length === 0) {
+            error = <NotFound hide='' />
+        } else {
+            error = <NotFound hide='hide' />
         }
 
         return (
@@ -124,7 +131,6 @@ class Cards extends Component {
 
                 <Row className="justify-content-md-center">
                     {error}
-                    {loading}
                     {printCard}
                 </Row>
             </div>

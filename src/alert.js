@@ -1,8 +1,8 @@
 import { Alert } from "react-bootstrap"
 
-const NotFound = () => {
+const NotFound = (props) => {
     return(
-        <Alert key='dark' variant='dark' className="text-center">
+        <Alert key='dark' variant='dark' className={`text-center ${props.hide}`}>
           Data yang anda cari tidak ditemukan
         </Alert>
     )
