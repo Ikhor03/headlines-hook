@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
 import NotFound from "./alert";
+import dataHeadlines from "./headlines.json"
 
 
 class Cards extends Component {
@@ -31,19 +32,26 @@ class Cards extends Component {
         }
     }
 
+    //fetching API
+    // async componentDidMount() {
+    //     const { url } = this.state;
+    //     await fetch(url)
+    //         .then(res => res.json())
+    //         .then((data) => {
+    //             let article = data.articles;
+    //             this.setState({
+    //                 data: article
+    //             })
+    //         })
+    //         .catch(() => {
+    //             this.setState({ err: true })
+    //         })
+    // }
+
+    //get data json lokal
     async componentDidMount() {
-        const { url } = this.state;
-        await fetch(url)
-            .then(res => res.json())
-            .then((data) => {
-                let article = data.articles;
-                this.setState({
-                    data: article
-                })
-            })
-            .catch(() => {
-                this.setState({ err: true })
-            })
+        let article = dataHeadlines.articles
+        this.setState({data : article})
     }
 
 
@@ -92,6 +100,7 @@ class Cards extends Component {
         }))
 
         let error;
+        let loading;
         if (err) {
             error = <NotFound />
         }
@@ -115,6 +124,7 @@ class Cards extends Component {
 
                 <Row className="justify-content-md-center">
                     {error}
+                    {loading}
                     {printCard}
                 </Row>
             </div>
