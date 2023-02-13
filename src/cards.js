@@ -41,19 +41,9 @@ class Cards extends Component {
                 })
             })
     }
-    async componentDidUpdate() {
-        const {url} = this.state;
-        await fetch(url)
-        .then(res => res.json())
-        .then((data) => {
-                let article = data.articles;
-                this.setState({
-                    data: article
-                })
-            })
-    }
 
 
+    //live search mengacu pada data API
     // async componentDidUpdate() {
     //     const { value, url } = this.state;
     //     if (!value) {
