@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
+import NotFound from "./alert";
 
 
 class Cards extends Component {
@@ -8,8 +9,8 @@ class Cards extends Component {
         this.state = {
             data: [],
             value: '',
-            isMatch: false,
-            url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=8f7c365e620944dea3d407af962acc45'
+            url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=8f7c365e620944dea3d407af962acc45',
+            err: false
         }
 
         this.inputHandler = this.inputHandler.bind(this);
@@ -31,14 +32,17 @@ class Cards extends Component {
     }
 
     async componentDidMount() {
-        const {url} = this.state;
+        const { url } = this.state;
         await fetch(url)
-        .then(res => res.json())
-        .then((data) => {
+            .then(res => res.json())
+            .then((data) => {
                 let article = data.articles;
                 this.setState({
                     data: article
                 })
+            })
+            .catch(() => {
+                this.setState({ err: true })
             })
     }
 
@@ -68,7 +72,7 @@ class Cards extends Component {
     // }
 
     render() {
-        const { data, value } = this.state;
+        const { data, value, err } = this.state;
         let printCard = (data.map((artikel, key) => {
             return (
                 <Col key={key} xs lg="5" className={`mb-3 ${this.searchHandler(artikel, value)}`}>
@@ -84,7 +88,13 @@ class Cards extends Component {
                     </Card>
                 </Col>
             )
+
         }))
+
+        let error;
+        if (err) {
+            error = <NotFound />
+        }
 
         return (
             <div>
@@ -104,6 +114,7 @@ class Cards extends Component {
                 </Container>
 
                 <Row className="justify-content-md-center">
+                    {error}
                     {printCard}
                 </Row>
             </div>
