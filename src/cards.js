@@ -1,94 +1,38 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Form, Row, Button, Container } from "react-bootstrap";
-import NotFound from "./alert";
 import dataHeadlines from "./headlines.json"
 
 
-class Cards extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            value: '',
-            url: 'https://newsapi.org/v2/top-headlines?country=us&apiKey=8f7c365e620944dea3d407af962acc45',
-            err: false,
-            cardFound: 0
-        }
+const Cards = () => {
 
-        this.inputHandler = this.inputHandler.bind(this);
+    const [data, setData] = useState([]);
+    const [value, setValue] = useState('');
+
+
+    const inputHandler = (e) => {
+        setValue(e.target.value)
     }
 
-    inputHandler(e) {
-        this.setState({
-            value: e.target.value
-        })
-    }
-
-    searchHandler(artikel, value, counter) {
+    const searchHandler = (artikel) => {
         let is = artikel.title.toLowerCase().includes(value.toLowerCase());
         if (!is) {
             return 'hide'
         } else {
-            counter.push(0)
             return ''
         }
 
     }
 
-    //fetching API
-    // async componentDidMount() {
-    //     const { url } = this.state;
-    //     await fetch(url)
-    //         .then(res => res.json())
-    //         .then((data) => {
-    //             let article = data.articles;
-    //             this.setState({
-    //                 data: article
-    //             })
-    //         })
-    //         .catch(() => {
-    //             this.setState({ err: true })
-    //         })
-    // }
-
     //get data json lokal
-    async componentDidMount() {
+    useEffect(() => {
         let article = dataHeadlines.articles
-        this.setState({ data: article })
+        setData(article)
+    }, [data])
 
-    }
-
-
-    //live search mengacu pada data API
-    // async componentDidUpdate() {
-    //     const { value, url } = this.state;
-    //     if (!value) {
-    //         await fetch(url)
-    //             .then(res => res.json())
-    //             .then((data) => {
-    //                 let article = data.articles;
-    //                 this.setState({
-    //                     data: article
-    //                 })
-    //             })
-    //     } else {
-    //         await fetch(`https://newsapi.org/v2/everything?q=${value}&sortBy=relevancy&apiKey=1ec087e86b5143d28480549839fbe11c`)
-    //             .then(res => res.json())
-    //             .then((data) => {
-    //                 let article = data.articles;
-    //                 this.setState({
-    //                     data: article
-    //                 })
-    //             })
-    //     }
-    // }
-
-    render() {
-        const { data, value, err } = this.state;
-        let counter = []
+    const render = () => {
         let printCard = (data.map((artikel, key) => {
             return (
-                <Col key={key} xs lg="5" className={`mb-3 ${this.searchHandler(artikel, value, counter)}`}>
+                <Col key={key} xs lg="5" className={`mb-3 ${searchHandler(artikel)}`}>
                     <Card style={{ width: '100%' }}>
                         <Card.Img variant="top" src={artikel.urlToImage} />
                         <Card.Body>
@@ -105,37 +49,31 @@ class Cards extends Component {
         }))
 
 
-        let error;
-        if (err || counter.length === 0) {
-            error = <NotFound hide='' />
-        } else {
-            error = <NotFound hide='hide' />
-        }
-
-        return (
-            <div>
-                <Container fluid className="mt-2">
-                    <Form className="d-flex">
-                        <Form.Control
-                            onInput={this.inputHandler}
-                            type="search"
-                            placeholder="Search"
-                            className="me-2"
-                            aria-label="Search"
-                        />
-                        <Button variant="light">Search</Button>
-                    </Form>
-                    <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
-                        today</p>
-                </Container>
-
-                <Row className="justify-content-md-center">
-                    {error}
-                    {printCard}
-                </Row>
-            </div>
-        )
+        return printCard;
     }
+
+    return (
+        <div>
+            <Container fluid className="mt-2">
+                <Form className="d-flex">
+                    <Form.Control
+                        onInput={inputHandler}
+                        type="search"
+                        placeholder="Search"
+                        className="me-2"
+                        aria-label="Search"
+                    />
+                    <Button variant="light">Search</Button>
+                </Form>
+                <p className="headline-badge mt-2 fw-bold text-white offset-1 fs-4"><span className="badge bg-warning">Headlines</span>
+                    today</p>
+            </Container>
+
+            <Row className="justify-content-md-center">
+                {render()}
+            </Row>
+        </div>
+    )
 }
 
 export default Cards;
